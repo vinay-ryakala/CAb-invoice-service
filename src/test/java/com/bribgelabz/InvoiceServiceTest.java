@@ -11,8 +11,9 @@ public class InvoiceServiceTest
    @Before
    public void setUp() {
       invoiceService = new InvoiceService();
-   }
 
+   }
+/*
    @Test
    public void givenDistanceTimeReturnFare() {
       double distance = 2.0;
@@ -45,13 +46,28 @@ public class InvoiceServiceTest
       InvoiceSummary summary = invoiceService.getInvoiceSummary(userId);
       InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(2,30);
       Assert.assertEquals(expectedInvoiceSummary, summary);
+   }*/
+
+   @Test
+   public void givenUserIdAndRides_ShouldReturnBothInvoiceSummary() {
+      String userId = "a@b.com";
+      Ride[] rides = {new Ride(2.0, 5,InvoiceService.RideMode.NORMAL),
+              new Ride(0.1, 1,InvoiceService.RideMode.NORMAL),
+      };
+      invoiceService.addRides(userId, rides);
+      InvoiceSummary summary = invoiceService.getInvoiceSummary(userId);
+      InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(2, 30.0);
+      Assert.assertEquals(expectedInvoiceSummary, summary);
    }
    @Test
-   public void givenDistanceTimeandTypeofRide_ShouldReturnMinFare() {
-      double distance = 0.1;
-      int time = 1;
-      String type = "Premium";
-      double fare = invoiceService.calculateFare(type, distance, time);
-      Assert.assertEquals(20,fare,0.0);
+   public void givenUserIdAndPremiumRides_ShouldReturnInvoiceSummary() {
+      String userId = "a@b.com";
+   Ride[] rides1 = {new Ride(2.0, 5,InvoiceService.RideMode.PREMIUM),
+           new Ride(0.1, 1,InvoiceService.RideMode.PREMIUM),
+   };
+      invoiceService.addRides(userId, rides1);
+   InvoiceSummary summary = invoiceService.getInvoiceSummary(userId);
+   InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(2, 60.0);
+      Assert.assertEquals(expectedInvoiceSummary, summary);
    }
 }
